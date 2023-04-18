@@ -33,6 +33,7 @@ function App() {
 
   const authProvider: AuthProvider = {
     login: () => {
+   
       return Promise.resolve(false);
     },
     logout: () => {
@@ -57,28 +58,72 @@ function App() {
     },
     getPermissions: () => Promise.resolve(),
     getUserIdentity: async () => {
-      if (user) {
+
+      //Save user to MongoDB
+
+      /* if(user) {
+        const response = await fetch('http://localhost:8080/api/v1/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: user.name,
+            email: user.email,
+            age: user.age,
+            phone: user.phone_number,
+            weight: user.weight,
+            height: user.height,
+            job: user.job,
+            diseases: user.diseases,
+            drug: user.drug,
+
+          })
+        })
+        const data = await response.json()
+
+        if(response.status === 200) {
+        localStorage.setItem(
+          "user",
+          JSON.stringify({
+            userid: data._id
+          })
+        )
+      } else {
+        return Promise.reject()
+      }
+
+      }
+ */
+
+     if (user) {
         return Promise.resolve({
           ...user,
           avatar: user.picture,
         });
-      }
+      } 
+      
+  
       return Promise.reject();
     },
   };
 
+ 
+
   return (
+    
+    
     <ColorModeContextProvider>
       <CssBaseline />
       <GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" } }} />
-      <RefineSnackbarProvider>
+  <RefineSnackbarProvider>
         <Refine
           dataProvider={dataProvider("https://api.fake-rest.refine.dev")}
           notificationProvider={notificationProvider}
           ReadyPage={ReadyPage}
           catchAll={<ErrorComponent />}
-          resources={[
-            {
+          resources={
+            [
+           
+              {
               name: "Dashboard",
               list: Home,
               edit: MuiInferencer,
@@ -152,7 +197,7 @@ function App() {
               
             },
             {
-              name: "MyProfile",
+              name: "my-profile",
                options: {label: 'My Profile'},
               list: MyProfile,
               edit: MuiInferencer,
@@ -163,6 +208,7 @@ function App() {
               
             },
           ]}
+          
           Title={Title}
           Sider={Sider}
           Layout={Layout}
@@ -173,7 +219,7 @@ function App() {
         />
       </RefineSnackbarProvider>
     </ColorModeContextProvider>
-  );
-}
+  );}
+
 
 export default App;
